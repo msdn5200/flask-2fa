@@ -148,7 +148,7 @@ if __name__ == '__main__':
     conn = sqlite3.connect('2fa.db')
     c = conn.cursor()
     c.execute('INSERT OR IGNORE INTO admins (username, password) VALUES (?, ?)',
-              ('admin', generate_password_hash('Aass1122')))
+              ('admin', generate_password_hash('admin123')))
     conn.commit()
     conn.close()
     app.run(host='0.0.0.0', port=5000, debug=True)
