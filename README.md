@@ -12,3 +12,6 @@ docker pull miku7117/flask-2fa:latest
 ```
 docker run -d -p 5000:5000 --name flask-2fa miku7117/flask-2fa:latest
 ```
+
+反代使用 
+Nginx Proxy Manager
