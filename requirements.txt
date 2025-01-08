@@ -1,0 +1,4 @@
+Flask==2.1.0
+pyotp==2.6.0
+cryptography==39.0.0
+Werkzeug==2.0.3

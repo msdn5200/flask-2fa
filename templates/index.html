@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Get 2FA Code</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #4facfe, #00f2fe);
+            color: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            width: 100%;
+            max-width: 400px;
+        }
+        h1 {
+            margin-bottom: 20px;
+            font-size: 24px;
+        }
+        label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+        input {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: none;
+            border-radius: 5px;
+            outline: none;
+        }
+        button {
+            width: 100%;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            background: linear-gradient(135deg, #6a11cb, #2575fc);
+            color: #fff;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+        button:hover {
+            background: linear-gradient(135deg, #2575fc, #6a11cb);
+        }
+        #result, #countdown {
+            margin-top: 20px;
+            font-weight: bold;
+        }
+    </style>
+    <script>
+        async function getTotp() {
+            const username = document.getElementById('username').value;
+            const response = await fetch(`/get_totp/${username}`);
+            const data = await response.json();
+            const resultElement = document.getElementById('result');
+            const countdownElement = document.getElementById('countdown');
+
+            if (data.totp_code) {
+                resultElement.textContent = `Your TOTP Code: ${data.totp_code}`;
+                startCountdown(30);
+            } else {
+                resultElement.textContent = `Error: ${data.error}`;
+                countdownElement.textContent = '';
+            }
+        }
+
+        function startCountdown(seconds) {
+            const countdownElement = document.getElementById('countdown');
+            let remaining = seconds;
+
+            function updateCountdown() {
+                if (remaining > 0) {
+                    countdownElement.textContent = `Valid for: ${remaining} seconds`;
+                    remaining -= 1;
+                    setTimeout(updateCountdown, 1000);
+                } else {
+                    countdownElement.textContent = 'Code expired. Please request a new one.';
+                }
+            }
+
+            updateCountdown();
+        }
+    </script>
+</head>
+<body>
+    <div class="container">
+        <h1>Get 2FA Code</h1>
+        <label>Username:</label>
+        <input type="text" id="username" placeholder="Enter your username" required>
+        <button onclick="getTotp()">Get TOTP Code</button>
+        <p id="result"></p>
+        <p id="countdown"></p>
+    </div>
+</body>
+</html>
